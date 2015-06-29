@@ -82,9 +82,10 @@ namespace Screen2WebM
             while (_recording)
             {
                 Bitmap tmpbitmap = new Bitmap(CaptureScreen(frame, tmpFolderName));
+                var frame1 = frame;
                 ThreadStart saveParams = delegate
                 {
-                    SaveImage(tmpbitmap, tmpFolderName, frame);
+                    SaveImage(tmpbitmap, tmpFolderName, frame1);
                 };
                 Thread tmpSaveThread = new Thread(saveParams);
                 tmpSaveThread.Start();
