@@ -3,11 +3,38 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
+
 namespace Screen2WebM
 {
     public partial class MainForm : Form
     {
+        [StructLayout(LayoutKind.Sequential)]
+        struct CURSORINFO
+        {
+            public Int32 cbSize;
+            public Int32 flags;
+            public IntPtr hCursor;
+            public POINTAPI ptScreenPos;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINTAPI
+        {
+            public int x;
+            public int y;
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetCursorInfo(out CURSORINFO pci);
+
+        [DllImport("user32.dll")]
+        static extern bool DrawIcon(IntPtr hDC, int X, int Y, IntPtr hIcon);
+
+        const Int32 CURSOR_SHOWING = 0x00000001;
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -23,7 +50,7 @@ namespace Screen2WebM
 
         private Size GetRecordingAreaSize()
         {
-            return new Size(mainContainer.Panel2.Width, mainContainer.Panel2.Height);
+            return new Size(mainContainer.Panel2.Width, mainContainer.Panel2.Height - 2);
         }
 
         private Bitmap CaptureScreen(int frame, string folderName)
@@ -31,20 +58,43 @@ namespace Screen2WebM
             Size captureArea = GetRecordingAreaSize();
             Bitmap target = new Bitmap(captureArea.Width, captureArea.Height);
             Point captureAreaLocation = new Point();
+            bool recordCursor = false;
             mainContainer.Panel2.Invoke((MethodInvoker) delegate
             {
                 captureAreaLocation = mainContainer.Panel2.PointToScreen(Point.Empty);
             });
+            checkBox2.Invoke((MethodInvoker) delegate
+            {
+                recordCursor = checkBox2.Checked;
+            });
             using (Graphics g = Graphics.FromImage(target))
             {
                 g.CopyFromScreen(captureAreaLocation, new Point(0, 0), new Size(captureArea.Width, captureArea.Height));
+                if (recordCursor)
+                {
+                    CURSORINFO pci;
+                    pci.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof (CURSORINFO));
+                    if (GetCursorInfo(out pci))
+                    {
+                        if (pci.flags == CURSOR_SHOWING)
+                        {
+                            int realPosX = pci.ptScreenPos.x - captureAreaLocation.X;
+                            int realPosY = pci.ptScreenPos.y - captureAreaLocation.Y;
+                            if (realPosX >= 0 && realPosY >= 0 && realPosX <= captureAreaLocation.X + captureArea.Width &&
+                                realPosY <= captureAreaLocation.Y + captureArea.Height)
+                            {
+                                DrawIcon(g.GetHdc(), realPosX, realPosY, pci.hCursor);
+                                g.ReleaseHdc();
+                            }
+                        }
+                    }
+                }
             }
             string tmpPath = Path.GetTempPath();
             if (!Directory.Exists(tmpPath + folderName))
             {
                 Directory.CreateDirectory(tmpPath + folderName);
             }
-            //target.Save(String.Format("{0}{2}\\{1}.jpg", tmpPath, frame, folderName), System.Drawing.Imaging.ImageFormat.Jpeg);
             return target;
         }
 
@@ -52,7 +102,7 @@ namespace Screen2WebM
         {
             string tmpPath = Path.GetTempPath();
             Bitmap image = (Bitmap) imageObj;
-            image.Save(String.Format("{0}{2}\\{1}.jpg", tmpPath, (int)frame, (string)foldername), System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(String.Format("{0}{2}\\{1}.{3}", tmpPath, (int)frame, (string)foldername, radioButton1.Checked ? "jpg" : "png"), radioButton1.Checked ? System.Drawing.Imaging.ImageFormat.Jpeg : System.Drawing.Imaging.ImageFormat.Png );
         }
 
         private void StartRecording(object fpsobject)
@@ -61,15 +111,18 @@ namespace Screen2WebM
 
             // outputTextBox.Text, ffmpegTextBox.Text
             string output = "";
-            string customffMpeg = "";
 
             outputTextBox.Invoke((MethodInvoker) delegate
             {
                 output = outputTextBox.Text;
             });
-            ffmpegTextBox.Invoke((MethodInvoker) delegate
+            radioButton1.Invoke((MethodInvoker) delegate
             {
-                customffMpeg = ffmpegTextBox.Text;
+                radioButton1.Enabled = false;
+            });
+            radioButton2.Invoke((MethodInvoker)delegate
+            {
+                radioButton2.Enabled = false;
             });
 
             int timeToSleep = Convert.ToInt32(1000D/fps);
@@ -105,7 +158,7 @@ namespace Screen2WebM
                     Thread.Sleep(sleepTime);
             }
             string tmpPath = Path.GetTempPath();
-            string command = String.Format(customffMpeg, tmpPath + tmpFolderName, fps, output);
+            string command = String.Format("/C \"ffmpeg -framerate {1} -start_number 0 -i \"{0}\\%d.{3}\" -r {1} -c:v libvpx {2}", tmpPath + tmpFolderName, fps, output + "\"" + (checkBox1.Checked ? " && pause" : ""), (radioButton1.Checked ? "jpg" : "png"));
             Process ffmpeg = new Process();
             ProcessStartInfo ffmpegOptions = new ProcessStartInfo("cmd.exe", command);
             ffmpeg.StartInfo = ffmpegOptions;
@@ -124,7 +177,8 @@ namespace Screen2WebM
                 timeLabel.Text = "00:00";
                 FPSCounter.Enabled = true;
                 outputTextBox.Enabled = true;
-                ffmpegTextBox.Enabled = true;
+                radioButton1.Enabled = true;
+                radioButton2.Enabled = true;
             }
             else if (!_recording)
             {
@@ -133,7 +187,8 @@ namespace Screen2WebM
                 recordingStatusLabel.Text = "Recording";
                 FPSCounter.Enabled = false;
                 outputTextBox.Enabled = false;
-                ffmpegTextBox.Enabled = false;
+                radioButton1.Enabled = false;
+                radioButton2.Enabled = false;
                 Thread captureThread = new Thread(new ParameterizedThreadStart(StartRecording));
                 captureThread.Start(Convert.ToInt32(FPSCounter.Value));
             }

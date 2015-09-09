@@ -30,18 +30,20 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainContainer = new System.Windows.Forms.SplitContainer();
-            this.playButton = new System.Windows.Forms.Button();
-            this.TopmostCheckbox = new System.Windows.Forms.CheckBox();
-            this.FPSCounter = new System.Windows.Forms.NumericUpDown();
-            this.fpsLabel = new System.Windows.Forms.Label();
-            this.outputTextBox = new System.Windows.Forms.TextBox();
             this.filenameLabel = new System.Windows.Forms.Label();
-            this.ffmpegLabel = new System.Windows.Forms.Label();
-            this.ffmpegTextBox = new System.Windows.Forms.TextBox();
+            this.outputTextBox = new System.Windows.Forms.TextBox();
+            this.fpsLabel = new System.Windows.Forms.Label();
+            this.FPSCounter = new System.Windows.Forms.NumericUpDown();
+            this.TopmostCheckbox = new System.Windows.Forms.CheckBox();
+            this.playButton = new System.Windows.Forms.Button();
             this.mainStatus = new System.Windows.Forms.StatusStrip();
-            this.sizeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.recordingStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sizeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timeLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mainContainer)).BeginInit();
             this.mainContainer.Panel1.SuspendLayout();
             this.mainContainer.SuspendLayout();
@@ -59,8 +61,10 @@
             // 
             // mainContainer.Panel1
             // 
-            this.mainContainer.Panel1.Controls.Add(this.ffmpegTextBox);
-            this.mainContainer.Panel1.Controls.Add(this.ffmpegLabel);
+            this.mainContainer.Panel1.Controls.Add(this.checkBox2);
+            this.mainContainer.Panel1.Controls.Add(this.checkBox1);
+            this.mainContainer.Panel1.Controls.Add(this.radioButton2);
+            this.mainContainer.Panel1.Controls.Add(this.radioButton1);
             this.mainContainer.Panel1.Controls.Add(this.filenameLabel);
             this.mainContainer.Panel1.Controls.Add(this.outputTextBox);
             this.mainContainer.Panel1.Controls.Add(this.fpsLabel);
@@ -71,34 +75,31 @@
             this.mainContainer.SplitterDistance = 132;
             this.mainContainer.TabIndex = 1;
             // 
-            // playButton
+            // filenameLabel
             // 
-            this.playButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.playButton.AutoSize = true;
-            this.playButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.playButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.playButton.Location = new System.Drawing.Point(12, 12);
-            this.playButton.Name = "playButton";
-            this.playButton.Size = new System.Drawing.Size(102, 39);
-            this.playButton.TabIndex = 0;
-            this.playButton.Text = "Record";
-            this.playButton.UseVisualStyleBackColor = true;
-            this.playButton.Click += new System.EventHandler(this.playButton_Click);
+            this.filenameLabel.AutoSize = true;
+            this.filenameLabel.Location = new System.Drawing.Point(9, 124);
+            this.filenameLabel.Name = "filenameLabel";
+            this.filenameLabel.Size = new System.Drawing.Size(111, 13);
+            this.filenameLabel.TabIndex = 5;
+            this.filenameLabel.Text = "Output Filename/Path";
             // 
-            // TopmostCheckbox
+            // outputTextBox
             // 
-            this.TopmostCheckbox.AutoSize = true;
-            this.TopmostCheckbox.Checked = true;
-            this.TopmostCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.TopmostCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TopmostCheckbox.Location = new System.Drawing.Point(10, 69);
-            this.TopmostCheckbox.Name = "TopmostCheckbox";
-            this.TopmostCheckbox.Size = new System.Drawing.Size(96, 17);
-            this.TopmostCheckbox.TabIndex = 1;
-            this.TopmostCheckbox.Text = "Always on Top";
-            this.TopmostCheckbox.UseVisualStyleBackColor = true;
-            this.TopmostCheckbox.CheckedChanged += new System.EventHandler(this.TopmostCheckbox_CheckedChanged);
+            this.outputTextBox.Location = new System.Drawing.Point(10, 140);
+            this.outputTextBox.Name = "outputTextBox";
+            this.outputTextBox.Size = new System.Drawing.Size(108, 20);
+            this.outputTextBox.TabIndex = 4;
+            this.outputTextBox.Text = "output.webm";
+            // 
+            // fpsLabel
+            // 
+            this.fpsLabel.AutoSize = true;
+            this.fpsLabel.Location = new System.Drawing.Point(9, 94);
+            this.fpsLabel.Name = "fpsLabel";
+            this.fpsLabel.Size = new System.Drawing.Size(27, 13);
+            this.fpsLabel.TabIndex = 3;
+            this.fpsLabel.Text = "FPS";
             // 
             // FPSCounter
             // 
@@ -117,48 +118,34 @@
             0,
             0});
             // 
-            // fpsLabel
+            // TopmostCheckbox
             // 
-            this.fpsLabel.AutoSize = true;
-            this.fpsLabel.Location = new System.Drawing.Point(9, 94);
-            this.fpsLabel.Name = "fpsLabel";
-            this.fpsLabel.Size = new System.Drawing.Size(27, 13);
-            this.fpsLabel.TabIndex = 3;
-            this.fpsLabel.Text = "FPS";
+            this.TopmostCheckbox.AutoSize = true;
+            this.TopmostCheckbox.Checked = true;
+            this.TopmostCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TopmostCheckbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TopmostCheckbox.Location = new System.Drawing.Point(10, 69);
+            this.TopmostCheckbox.Name = "TopmostCheckbox";
+            this.TopmostCheckbox.Size = new System.Drawing.Size(96, 17);
+            this.TopmostCheckbox.TabIndex = 1;
+            this.TopmostCheckbox.Text = "Always on Top";
+            this.TopmostCheckbox.UseVisualStyleBackColor = true;
+            this.TopmostCheckbox.CheckedChanged += new System.EventHandler(this.TopmostCheckbox_CheckedChanged);
             // 
-            // outputTextBox
+            // playButton
             // 
-            this.outputTextBox.Location = new System.Drawing.Point(10, 140);
-            this.outputTextBox.Name = "outputTextBox";
-            this.outputTextBox.Size = new System.Drawing.Size(108, 20);
-            this.outputTextBox.TabIndex = 4;
-            this.outputTextBox.Text = "output.webm";
-            // 
-            // filenameLabel
-            // 
-            this.filenameLabel.AutoSize = true;
-            this.filenameLabel.Location = new System.Drawing.Point(9, 124);
-            this.filenameLabel.Name = "filenameLabel";
-            this.filenameLabel.Size = new System.Drawing.Size(111, 13);
-            this.filenameLabel.TabIndex = 5;
-            this.filenameLabel.Text = "Output Filename/Path";
-            // 
-            // ffmpegLabel
-            // 
-            this.ffmpegLabel.AutoSize = true;
-            this.ffmpegLabel.Location = new System.Drawing.Point(7, 173);
-            this.ffmpegLabel.Name = "ffmpegLabel";
-            this.ffmpegLabel.Size = new System.Drawing.Size(116, 13);
-            this.ffmpegLabel.TabIndex = 6;
-            this.ffmpegLabel.Text = "Custom ffmpeg Options";
-            // 
-            // ffmpegTextBox
-            // 
-            this.ffmpegTextBox.Location = new System.Drawing.Point(10, 189);
-            this.ffmpegTextBox.Name = "ffmpegTextBox";
-            this.ffmpegTextBox.Size = new System.Drawing.Size(110, 20);
-            this.ffmpegTextBox.TabIndex = 7;
-            this.ffmpegTextBox.Text = "/C ffmpeg -framerate {1} -start_number 0 -i \"{0}\\%d.jpg\" -r {1} -c:v libvpx {2}";
+            this.playButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.playButton.AutoSize = true;
+            this.playButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.playButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playButton.Location = new System.Drawing.Point(12, 12);
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(102, 39);
+            this.playButton.TabIndex = 0;
+            this.playButton.Text = "Record";
+            this.playButton.UseVisualStyleBackColor = true;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
             // mainStatus
             // 
@@ -172,22 +159,66 @@
             this.mainStatus.TabIndex = 2;
             this.mainStatus.Text = "statusStrip1";
             // 
-            // sizeLabel
-            // 
-            this.sizeLabel.Name = "sizeLabel";
-            this.sizeLabel.Size = new System.Drawing.Size(24, 17);
-            this.sizeLabel.Text = "1s1";
-            // 
             // recordingStatusLabel
             // 
             this.recordingStatusLabel.Name = "recordingStatusLabel";
             this.recordingStatusLabel.Size = new System.Drawing.Size(72, 17);
             this.recordingStatusLabel.Text = "On Stand By";
             // 
+            // sizeLabel
+            // 
+            this.sizeLabel.Name = "sizeLabel";
+            this.sizeLabel.Size = new System.Drawing.Size(24, 17);
+            this.sizeLabel.Text = "1s1";
+            // 
             // timeLabel
             // 
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(0, 17);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(10, 166);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(52, 17);
+            this.radioButton1.TabIndex = 8;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "JPEG";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(10, 189);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(48, 17);
+            this.radioButton2.TabIndex = 9;
+            this.radioButton2.Text = "PNG";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(9, 235);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(97, 17);
+            this.checkBox1.TabIndex = 10;
+            this.checkBox1.Text = "Pause Console";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Location = new System.Drawing.Point(10, 212);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(94, 17);
+            this.checkBox2.TabIndex = 11;
+            this.checkBox2.Text = "Record Cursor";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -197,6 +228,7 @@
             this.Controls.Add(this.mainStatus);
             this.Controls.Add(this.mainContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(177, 86);
             this.Name = "MainForm";
             this.Text = "Screen2Webm";
             this.Resize += new System.EventHandler(this.Form1_Resize);
@@ -219,15 +251,16 @@
         private System.Windows.Forms.CheckBox TopmostCheckbox;
         private System.Windows.Forms.Label fpsLabel;
         private System.Windows.Forms.NumericUpDown FPSCounter;
-        private System.Windows.Forms.TextBox ffmpegTextBox;
-        private System.Windows.Forms.Label ffmpegLabel;
         private System.Windows.Forms.Label filenameLabel;
         private System.Windows.Forms.TextBox outputTextBox;
         private System.Windows.Forms.StatusStrip mainStatus;
         private System.Windows.Forms.ToolStripStatusLabel sizeLabel;
         private System.Windows.Forms.ToolStripStatusLabel recordingStatusLabel;
         private System.Windows.Forms.ToolStripStatusLabel timeLabel;
-
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
 
